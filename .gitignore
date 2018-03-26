@@ -1,0 +1,12 @@
+agent/node_modules
+server/node_modules
+.DS_Store
+npm-debug.log
+
+ IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
