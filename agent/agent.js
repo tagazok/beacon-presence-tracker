@@ -1,11 +1,13 @@
 const mqtt = require('mqtt')
 const BeaconScanner = require('node-beacon-scanner');
+
 const Scanner = new BeaconScanner();
 const moment = require('moment');
 
 const brockerUrl = 'mqtt://192.168.1.25:1883';
 const client = mqtt.connect(brockerUrl);
 const agentName = "beacon2";
+
 
 const macAddresses = [
   "ef:c1:ae:82:a6:21",
@@ -19,6 +21,7 @@ Scanner.startScan().then(() => {
 });
 
 Scanner.onadvertisement = (ad) => {
+  
   if (macAddresses.includes(ad.address)) {
     const message = {
       agent: agentName,
@@ -27,21 +30,18 @@ Scanner.onadvertisement = (ad) => {
       rssi: ad.rssi,
       url: ad.eddystoneUrl.url
     };
-    // console.log(message);
     sendUpdate(message);
   }
 }
 
 client.on('connect', () => {
-  // Inform controllers that garage is connected
+  
   console.log("Beacon/connected");
   const message = { 
     agent: agentName,
     connected:'true'
   }
   client.publish('beacon/connected', JSON.stringify(message));
-  
- 
 
     // if (users[ad.address]) {
     //   const user = users[ad.address];
