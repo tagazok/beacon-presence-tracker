@@ -120,8 +120,14 @@ function getMedian(values) {
 setInterval(() => { 
   for(let user of Object.values(users)) {
     for(let [agent, values] of Object.entries(user.distances)) {
-      if (!user.agents[agent]) { user.agents[agent] = {} }
-      user.agents[agent].distance = getMedian(values);
+      // if (!user.agents[agent]) { user.agents[agent] = {} }
+      user.agents[agent] = getMedian(values);
+    }
+
+    if(Object.keys(user.agents).length === 0 && user.agents.constructor === Object) {
+      user.closest_agent = "";
+    } else {
+      user.closest_agent = Object.keys(user.agents).reduce((a, b) => user.agents[a] < user.agents[b] ? a : b);
     }
     
     Stream.emit("push", "message", user);
